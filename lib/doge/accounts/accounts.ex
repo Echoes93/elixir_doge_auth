@@ -19,7 +19,7 @@ defmodule Doge.Accounts do
 
   def register_user(attrs) do
     %User{}
-    |> User.registration_changeset(attrs)
+    |> User.signup_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -37,11 +37,21 @@ defmodule Doge.Accounts do
     User.changeset(user, %{})
   end
 
-  def find_and_confirm_password(%{"email" => email, "password" => password}) do
-    case Repo.get_by(Doge.Accounts.User, email: String.downcase(email)) do
-      %Doge.Accounts.User{} = user -> check_password user, password
-      nil -> { :error, User.error_changeset(:email, "User not found") }
+  def find_and_confirm_password(params) do
+    changeset = User.signin_changeset(%User{}, params)
+    
+    if changeset.valid? do
+      find_user changeset
+    else
+      {:error, changeset}
     end
+  end
+
+  defp find_user(%{ changes: %{"email": email, "password": password} }) do
+      case Repo.get_by(User, email: String.downcase(email)) do
+        %User{} = user -> check_password user, password
+        nil -> { :error, User.error_changeset(:email, "User not found") }
+      end
   end
 
   defp check_password(user, password) do

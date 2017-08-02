@@ -21,7 +21,14 @@ defmodule Doge.Accounts.User do
     |> unique_constraint(:email)
   end
 
-  def registration_changeset(%User{} = user, attrs) do
+  def signin_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email, :password])
+    |> validate_format(:email, ~r/@/)
+  end
+
+  def signup_changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:email, :username, :password])
     |> validate_required([:email, :password])

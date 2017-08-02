@@ -19,13 +19,6 @@ defmodule DogeWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated, handler: DogeWeb.SessionController
   end
 
-  scope "/", DogeWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-  end
-
-
   scope "/api", DogeWeb do
     pipe_through :api
 
