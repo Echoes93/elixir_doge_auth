@@ -11,9 +11,10 @@ defmodule DogeWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id,
+    %{
+      id: user.id,
       email: user.email,
-      username: user.username,
-      hashed_password: user.hashed_password}
+      username: user.username
+    }
   end
 end

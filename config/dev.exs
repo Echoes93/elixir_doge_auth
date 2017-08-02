@@ -56,3 +56,6 @@ config :doge, Doge.Repo,
   database: "doge_dev",
   hostname: "localhost",
   pool_size: 10
+
+  config :guardian, Guardian,
+    secret_key: "IyceRDJHLkDy8Ec3gxbqo4U5Z9J3t8UibqXFEXpiVdGv6+ibcdV7wq1uUxX6X9bO"

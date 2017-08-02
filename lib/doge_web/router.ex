@@ -11,18 +11,32 @@ defmodule DogeWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
+  end
 
-    resources "/users", UserController
+  pipeline :auth_required do
+    plug Guardian.Plug.EnsureAuthenticated, handler: DogeWeb.SessionController
   end
 
   scope "/", DogeWeb do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :browser
 
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", DogeWeb do
-  #   pipe_through :api
-  # end
+
+  scope "/api", DogeWeb do
+    pipe_through :api
+
+    post "/signup", SessionController, :signup
+    post "/signin", SessionController, :signin
+    get "/signout", SessionController, :signout
+
+    scope "/users" do
+      pipe_through :auth_required
+
+      resources "/", UserController
+    end
+  end
 end

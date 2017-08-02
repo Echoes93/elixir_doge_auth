@@ -42,6 +42,7 @@ defmodule Doge.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 0.12"},
       {:guardian, "~> 0.14"}
     ]
   end
