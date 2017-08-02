@@ -48,7 +48,7 @@ defmodule Doge.Accounts do
   end
 
   defp find_user(%{ changes: %{"email": email, "password": password} }) do
-      case Repo.get_by(User, email: String.downcase(email)) do
+      case Repo.get_by(User, email: email) do
         %User{} = user -> check_password user, password
         nil -> { :error, User.error_changeset(:email, "User not found") }
       end
