@@ -9,6 +9,7 @@ defmodule Doge.Accounts.User do
     field :username, :string
     field :hashed_password, :string
     field :password, :string, virtual: true
+    many_to_many :roles, Doge.Accounts.Role, join_through: "users_roles"
 
     timestamps()
   end
