@@ -16,4 +16,17 @@ defmodule Doge.Accounts.Role do
     |> validate_required([:role])
     |> unique_constraint(:role)
   end
+
+  def roles_to_atoms(roles_list) do
+    Enum.map(roles_list, &match_role/1)
+  end
+
+  # TODO: MOVE ROLE DEFENITION TO CONFIG FILE
+  defp match_role(role) do
+    case role.role do
+      "Admin" -> :admin
+      "User"  -> :user
+      _       -> :unknown_role
+    end
+  end
 end

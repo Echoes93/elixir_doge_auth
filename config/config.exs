@@ -28,6 +28,9 @@ config :guardian, Guardian,
   issuer: "Doge",
   ttl: {30, :days},
   verify_issuer: true,
+  permissions: %{
+    roles: [:admin, :user]
+  },
   serializer: Doge.GuardianSerializer
 
 

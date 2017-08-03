@@ -35,8 +35,16 @@ defmodule DogeWeb.SessionController do
     |> render(DogeWeb.SessionView, "forbidden.json", error: "Not Authenticated")
   end
 
+  def unauthorized(conn, _params) do
+    conn
+    |> put_status(:forbidden)
+    |> render(DogeWeb.SessionView, "forbidden.json", error: "Not Authorized")
+  end
+
   defp authorize(conn, user) do
-    new_conn = Guardian.Plug.api_sign_in(conn, user)
+    perms = %{roles: Doge.Accounts.Role.roles_to_atoms(user.roles)}
+
+    new_conn = Guardian.Plug.api_sign_in(conn, user, :token, perms: perms)
     jwt = Guardian.Plug.current_token(new_conn)
     claims = elem(Guardian.Plug.claims(new_conn), 1)
     exp = Map.get(claims, "exp")

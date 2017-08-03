@@ -19,6 +19,10 @@ defmodule DogeWeb.Router do
     plug Guardian.Plug.EnsureAuthenticated, handler: DogeWeb.SessionController
   end
 
+  pipeline :admin_routes do
+    plug Guardian.Plug.EnsurePermissions, on_failure: { DogeWeb.SessionController, :unauthorized }, roles: [:admin]
+  end
+
   scope "/api", DogeWeb do
     pipe_through :api
 
@@ -27,7 +31,7 @@ defmodule DogeWeb.Router do
     get "/signout", SessionController, :signout
 
     scope "/users" do
-      pipe_through :auth_required
+      pipe_through [:auth_required, :admin_routes]
 
       resources "/", UserController
     end

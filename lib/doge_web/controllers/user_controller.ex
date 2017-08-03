@@ -6,7 +6,7 @@ defmodule DogeWeb.UserController do
 
   action_fallback DogeWeb.FallbackController
 
-  def index(conn, _params) do
+  def index(conn, _params) do    
     users = Accounts.list_users()
     render(conn, "index.json", users: users)
   end
